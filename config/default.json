@@ -10,10 +10,10 @@
     },
     "http": {
         "listen": "localhost",
-        "port": 3000
+        "port": 5000
     },
     "client": {
-        "apiUrl": "http://localhost:3000",
+        "apiUrl": "http://localhost:5000",
         "debugMode": true
     }
 }
