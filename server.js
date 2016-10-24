@@ -18,7 +18,6 @@ var fixPath = function (pathString) {
     return path.resolve(path.normalize(pathString));
 };
 
-
 // -----------------
 // Configure express
 // -----------------
@@ -43,7 +42,16 @@ app.use(helmet.xssFilter());
 app.use(helmet.nosniff());
 
 app.set('view engine', 'jade');
+app.set('port', (process.env.PORT || 5000));
 
+//app.use(express.static(__dirname + '/public'));
+
+// views is directory for all template files
+//app.set('views', __dirname + '/views');
+
+//app.get('/', function(request, response) {
+//  response.render('pages/index');
+//});
 
 // -----------------
 // Set up our little demo API
@@ -122,5 +130,8 @@ new Moonboots({
 
 
 // listen for incoming http requests on the port as specified in our config
-app.listen(config.http.port);
-console.log('Locus Digitalis is running at: http://localhost:' + config.http.port + ' Yep. That\'s pretty awesome.');
+//app.listen(config.http.port);
+//console.log('Locus Digitalis is running at: http://localhost:' + config.http.port + ' Yep. That\'s pretty awesome.');
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
+});
