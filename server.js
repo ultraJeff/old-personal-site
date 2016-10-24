@@ -1,6 +1,12 @@
 /* global console */
 var path = require('path');
 var express = require('express');
+
+// ---------------------------------
+// Environment Variable Configurator
+// ---------------------------------
+require('dotenv').config()
+
 // Helmet provides HTTP headers for added security to Express
 var helmet = require('helmet');
 // Body Parser parses various MIME types
@@ -29,25 +35,25 @@ var fixPath = function (pathString) {
     return path.resolve(path.normalize(pathString));
 };
 
-// -----------------
+// ------------
 // Call express
-// -----------------
+// ------------
 var app = express();
+var development = process.env.NODE_ENV !== 'production';
 
 // -----------------
 // Configure express
 // -----------------
-app.set('view engine', 'jade');
 // Port HAS to be set to process.env.PORT for the app
 // to work on Heroku!
 app.set('port', (process.env.PORT || config.http.port));
-
 app.use(compress());
+app.set('view engine', 'jade');
 app.use(serveStatic(fixPath('public')));
 //app.use(express.static(__dirname + '/public'));
 
 // we only want to expose tests in dev
-if (config.isDev) {
+if (development) {
     app.use(serveStatic(fixPath('test/assets')));
     app.use(serveStatic(fixPath('test/spacemonkey')));
 }
@@ -57,7 +63,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 // in order to test this with spacemonkey we need frames
-if (!config.isDev) {
+if (!development) {
     app.use(helmet.xframe());
 }
 app.use(helmet.xssFilter());
@@ -85,7 +91,7 @@ app.post('/api/people', api.add);
 // -----------------
 // Enable the functional test site in development
 // -----------------
-if (config.isDev) {
+if (development) {
     app.get('/test*', semiStatic({
         folderPath: fixPath('test'),
         root: '/test'
@@ -109,7 +115,7 @@ new Moonboots({
         jsFileName: 'locus-digitalis',
         cssFileName: 'locus-digitalis',
         main: fixPath('client/app.js'),
-        developmentMode: config.isDev,
+        developmentMode: development,
         libraries: [
         ],
         stylesheets: [
@@ -117,13 +123,13 @@ new Moonboots({
             fixPath('stylesheets/app.css')
         ],
         browserify: {
-            debug: config.isDev
+            debug: development
         },
         beforeBuildJS: function () {
             // This re-builds our template files from jade each time the app's main
             // js file is requested. Which means you can seamlessly change jade and
             // refresh in your browser to get new templates.
-            if (config.isDev) {
+            if (development) {
                 templatizer(fixPath('templates'), fixPath('client/templates.js'));
             }
         },
@@ -131,7 +137,7 @@ new Moonboots({
             // This re-builds css from stylus each time the app's main
             // css file is requested. Which means you can seamlessly change stylus files
             // and see new styles on refresh.
-            if (config.isDev) {
+            if (development) {
                 stylizer({
                     infile: fixPath('stylesheets/app.styl'),
                     outfile: fixPath('stylesheets/app.css'),
