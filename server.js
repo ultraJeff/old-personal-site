@@ -38,7 +38,7 @@ var app = express();
 // Configure express
 // -----------------
 app.set('view engine', 'jade');
-app.set('port', (process.env.PORT || 5000));
+app.set('port', (config.http.port || 5000));
 
 app.use(compress());
 app.use(serveStatic(fixPath('public')));
@@ -146,7 +146,6 @@ new Moonboots({
 
 // listen for incoming http requests on the port as specified in our config
 //app.listen(config.http.port);
-//console.log('Locus Digitalis is running at: http://localhost:' + config.http.port + ' Yep. That\'s pretty awesome.');
 app.listen(app.get('port'), function() {
   console.log('Locus Digitalis is running at: http://localhost:' + app.get('port'));
 });
