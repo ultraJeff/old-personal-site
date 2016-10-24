@@ -69,14 +69,6 @@ if (!development) {
 app.use(helmet.xssFilter());
 app.use(helmet.nosniff());
 
-
-// views is directory for all template files
-//app.set('views', __dirname + '/views');
-
-//app.get('/', function(request, response) {
-//  response.render('pages/index');
-//});
-
 // -----------------
 // Set up our little demo API
 // -----------------
