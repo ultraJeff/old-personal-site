@@ -1,6 +1,6 @@
 {
   "name": "locus-digitalis",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": "Jeff Franklin",
   "engines": {
     "node": "5.2.x",
