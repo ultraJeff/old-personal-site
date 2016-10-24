@@ -1,17 +1,28 @@
 /* global console */
 var path = require('path');
 var express = require('express');
+// Helmet provides HTTP headers for added security to Express
 var helmet = require('helmet');
+// Body Parser parses various MIME types
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
+// Moonboots provides browerify, uglify, caching, and many build tool tasks
+// So instead of Gulp needing to run, Moonboots can handle similar tasks per page load
 var Moonboots = require('moonboots-express');
+// Compression provides gzip header
 var compress = require('compression');
+// Get Config is from &yet and seeks to make env vars easier to deal with
 var config = require('getconfig');
+// Semi-static will render static Jade templates from Express easily
 var semiStatic = require('semi-static');
+// serve-static serves up static files... seems unnecessary?
 var serveStatic = require('serve-static');
+// Stylizer works with Moonboots to handle Stylus files on the fly
 var stylizer = require('stylizer');
+// Templatizer is a very fast Jade templating engine that
+// turns a folder full of jade templates into a CommonJS
+// module that exports all the template functions in client/templates.js
 var templatizer = require('templatizer');
-var app = express();
 
 // a little helper for fixing paths for various environments
 var fixPath = function (pathString) {
@@ -19,10 +30,19 @@ var fixPath = function (pathString) {
 };
 
 // -----------------
+// Call express
+// -----------------
+var app = express();
+
+// -----------------
 // Configure express
 // -----------------
+app.set('view engine', 'jade');
+app.set('port', (process.env.PORT || 5000));
+
 app.use(compress());
 app.use(serveStatic(fixPath('public')));
+//app.use(express.static(__dirname + '/public'));
 
 // we only want to expose tests in dev
 if (config.isDev) {
@@ -41,10 +61,6 @@ if (!config.isDev) {
 app.use(helmet.xssFilter());
 app.use(helmet.nosniff());
 
-app.set('view engine', 'jade');
-app.set('port', (process.env.PORT || 5000));
-
-//app.use(express.static(__dirname + '/public'));
 
 // views is directory for all template files
 //app.set('views', __dirname + '/views');
@@ -73,7 +89,6 @@ if (config.isDev) {
         root: '/test'
     }));
 }
-
 
 // -----------------
 // Set our client config cookie
@@ -133,5 +148,5 @@ new Moonboots({
 //app.listen(config.http.port);
 //console.log('Locus Digitalis is running at: http://localhost:' + config.http.port + ' Yep. That\'s pretty awesome.');
 app.listen(app.get('port'), function() {
-  console.log('Node app is running on port', app.get('port'));
+  console.log('Locus Digitalis is running at: http://localhost:' + app.get('port'));
 });
