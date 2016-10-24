@@ -38,7 +38,9 @@ var app = express();
 // Configure express
 // -----------------
 app.set('view engine', 'jade');
-app.set('port', (config.http.port || 5000));
+// Port HAS to be set to process.env.PORT for the app
+// to work on Heroku!
+app.set('port', (process.env.PORT || config.http.port));
 
 app.use(compress());
 app.use(serveStatic(fixPath('public')));
@@ -145,7 +147,6 @@ new Moonboots({
 
 
 // listen for incoming http requests on the port as specified in our config
-//app.listen(config.http.port);
 app.listen(app.get('port'), function() {
   console.log('Locus Digitalis is running at: http://localhost:' + app.get('port'));
 });
