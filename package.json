@@ -1,7 +1,11 @@
 {
   "name": "locus-digitalis",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Jeff Franklin",
+  "engines": {
+    "node": "5.2.x",
+    "npm": "3.10.x"
+  },
   "dependencies": {
     "ampersand-app": "^1.0.0",
     "ampersand-dom": "^1.2.1",
